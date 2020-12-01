@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/heldeen/aoc2020/challenge/day1"
 	"os"
 
 	"github.com/heldeen/aoc2020/challenge/cmd"
+	"github.com/heldeen/aoc2020/challenge/day1"
 )
 
 func main() {
