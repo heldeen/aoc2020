@@ -112,3 +112,4 @@ modules.xml
 # End of https://www.gitignore.io/api/go,intellij+all
 
 ./aoc2020
+aoc2020
