@@ -13,7 +13,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/nlowe/aoc2020/util"
+	"github.com/heldeen/aoc2020/util"
 	"github.com/zellyn/kooky"
 	"github.com/zellyn/kooky/chrome"
 )
@@ -29,7 +29,7 @@ func AddCommandsTo(root *cobra.Command) {
 		Short: "Problems for Day {{ .N }}",
 	}
 
-	//day.AddCommand(aCommand())
+	day.AddCommand(aCommand())
     //day.AddCommand(bCommand())
 
 	root.AddCommand(day)
@@ -41,8 +41,8 @@ func AddCommandsTo(root *cobra.Command) {
 import (
     "fmt"
 
-    "github.com/nlowe/aoc2020/challenge"
-	"github.com/nlowe/aoc2020/util"
+    "github.com/heldeen/aoc2020/challenge"
+	"github.com/heldeen/aoc2020/util"
 	"github.com/spf13/cobra"
 )
 
@@ -66,7 +66,7 @@ func {{ .AB | toLower }}(challenge *challenge.Input) int {
 import (
 	"testing"
 
-	"github.com/nlowe/aoc2020/challenge"
+	"github.com/heldeen/aoc2020/challenge"
 	"github.com/stretchr/testify/require"
 )
 
@@ -128,13 +128,18 @@ func main() {
 	}
 
 	if _, stat := os.Stat(filepath.Join(p, "input.txt")); os.IsNotExist(stat) {
-		fmt.Println("fetching input for day", n)
-		problemInput, err := getInput(n)
+		fmt.Println("fetching input for day...SIKE! You have to do it", n)
+		//problemInput, err := getInput(n)
+		//if err != nil {
+		//	panic(err)
+		//}
+		//
+		//if err := ioutil.WriteFile(filepath.Join(p, "input.txt"), problemInput, 0644); err != nil {
+		//	panic(err)
+		//}
+		file, err := os.Create(filepath.Join(p, "input.txt"))
+		defer file.Close()
 		if err != nil {
-			panic(err)
-		}
-
-		if err := ioutil.WriteFile(filepath.Join(p, "input.txt"), problemInput, 0644); err != nil {
 			panic(err)
 		}
 	} else {
@@ -172,6 +177,10 @@ func chromeCookiePath() (string, error) {
 	if runtime.GOOS == "windows" {
 		localAppData, err := os.UserCacheDir()
 		return filepath.Join(localAppData, "Google", "Chrome", "User Data", "Default", "Cookies"), err
+	}
+	if runtime.GOOS == "linux" {
+		homeDir, err := os.UserHomeDir()
+		return filepath.Join(homeDir, ".config", "google-chrome", "Default", "Cookies"), err
 	}
 
 	return "", fmt.Errorf("chrome cookie path for GOOS %s not implemented, set CHROME_PROFILE_PATH instead", runtime.GOOS)

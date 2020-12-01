@@ -3,11 +3,15 @@ package main
 import (
 	"os"
 
-	"github.com/nlowe/aoc2020/challenge/cmd"
+	"github.com/heldeen/aoc2020/challenge/cmd"
 )
 
 func main() {
-	if err := cmd.NewRootCommand().Execute(); err != nil {
+	rootCommand := cmd.NewRootCommand()
+
+	//dayX.AddCommandsTo(rootCommand)
+
+	if err := rootCommand.Execute(); err != nil {
 		os.Exit(1)
 	}
 }

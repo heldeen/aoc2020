@@ -3,8 +3,8 @@ package example
 import (
 	"fmt"
 
-	"github.com/nlowe/aoc2020/challenge"
-	"github.com/nlowe/aoc2020/util"
+	"github.com/heldeen/aoc2020/challenge"
+	"github.com/heldeen/aoc2020/util"
 	"github.com/spf13/cobra"
 )
 
