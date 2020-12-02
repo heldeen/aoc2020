@@ -12,10 +12,9 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/heldeen/aoc2020/util"
-	"github.com/zellyn/kooky"
-	"github.com/zellyn/kooky/chrome"
 )
 
 const (
@@ -190,27 +189,48 @@ func getInput(day int) ([]byte, error) {
 	_, _ = os.UserConfigDir()
 	_, _ = os.UserCacheDir()
 
-	cookiePath, err := chromeCookiePath()
-	if err != nil {
-		return nil, err
-	}
-
-	cookies, err := chrome.ReadCookies(cookiePath, kooky.Valid, kooky.Name("session"), kooky.Domain(".adventofcode.com"))
-	if err != nil {
-		return nil, err
-	}
-
-	if len(cookies) != 1 {
-		return nil, fmt.Errorf("session cookie not found or too many results. Got %d, want 1, ensure that you are logged in", len(cookies))
-	}
-
+	//cookiePath, err := chromeCookiePath()
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//cookies, err := chrome.ReadCookies(cookiePath, kooky.Valid, kooky.Name("session"), kooky.Domain(".adventofcode.com"))
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//if len(cookies) != 1 {
+	//	return nil, fmt.Errorf("session cookie not found or too many results. Got %d, want 1, ensure that you are logged in", len(cookies))
+	//}
+	//
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://adventofcode.com/2020/day/%d/input", day), nil)
 	if err != nil {
 		return nil, err
 	}
+	//
+	//sessionToken := cookies[0].HTTPCookie()
 
-	sessionToken := cookies[0].HTTPCookie()
-	req.AddCookie(&sessionToken)
+	exp, err := time.Parse(time.RFC3339, "2030-10-31T15:53:59.991Z")
+	if err != nil {
+		return nil, err
+	}
+
+	ck := http.Cookie{
+		Name:       "session",
+		Value:      "", //TODO get this
+		Path:       "/",
+		Domain:     ".adventofcode.com",
+		Expires:    exp,
+		RawExpires: "",
+		MaxAge:     0,
+		Secure:     true,
+		HttpOnly:   true,
+		SameSite:   0,
+		Raw:        "",
+		Unparsed:   nil,
+	}
+
+	req.AddCookie(&ck)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

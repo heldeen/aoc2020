@@ -23,7 +23,6 @@ func a(challenge *challenge.Input) int {
 	lines := util.LinesToIntSlice(challenge.Lines())
 
 	for _, i := range lines {
-
 		for _, j := range lines {
 			if i+j == 2020 {
 				return i * j
