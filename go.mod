@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/pkg/profile v1.5.0
+	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.5.1
