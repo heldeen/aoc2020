@@ -113,3 +113,5 @@ modules.xml
 
 ./aoc2020
 aoc2020
+
+*.log
