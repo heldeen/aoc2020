@@ -2,9 +2,12 @@ package day6
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/spf13/cobra"
 
 	"github.com/heldeen/aoc2020/challenge"
-	"github.com/spf13/cobra"
+	"github.com/heldeen/aoc2020/util"
 )
 
 func aCommand() *cobra.Command {
@@ -22,19 +25,16 @@ func a(challenge *challenge.Input) int {
 
 	sum := 0
 
-	questions := make(map[string]bool, 26)
+	for gl := range util.GroupedLines(challenge.Lines()) {
 
-	for l := range challenge.Lines() {
-		if len(l) == 0 {
-			sum += len(questions)
-			questions = make(map[string]bool, 26)
-		} else {
-			for _, c := range l {
-				questions[string(c)] = true
+		questions := make(map[string]bool, 26)
+		for _, l := range gl {
+			for _, c := range strings.Split(l, "") {
+				questions[c] = true
 			}
 		}
+		sum += len(questions)
 	}
-	sum += len(questions)
 
 	return sum
 }
