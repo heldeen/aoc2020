@@ -110,3 +110,6 @@ modules.xml
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/go,intellij+all
+
+./aoc2020
+aoc2020
