@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/heldeen/aoc2020/challenge/day5"
+	"github.com/heldeen/aoc2020/challenge/day6"
 	"log"
 	"os"
 	"time"
@@ -30,6 +31,7 @@ func main() {
 	day3.AddCommandsTo(rootCommand)
 	day4.AddCommandsTo(rootCommand)
 	day5.AddCommandsTo(rootCommand)
+	day6.AddCommandsTo(rootCommand)
 	//dayX.AddCommandsTo(rootCommand) // go run gen/problem.go X a
 
 	if err := rootCommand.Execute(); err != nil {
