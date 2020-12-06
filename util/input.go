@@ -2,7 +2,24 @@ package util
 
 import (
 	"strconv"
+	"strings"
 )
+
+func LinesToStrLine(input <-chan string) string {
+
+	for l := range input {
+		return l
+	}
+	return ""
+}
+
+func LinesToStrSlice(input <-chan string) (lines []string) {
+
+	for l := range input {
+		lines = append(lines, l)
+	}
+	return
+}
 
 func LinesToIntSlice(input <-chan string) (lines []int) {
 
@@ -11,4 +28,8 @@ func LinesToIntSlice(input <-chan string) (lines []int) {
 		lines = append(lines, n)
 	}
 	return
+}
+
+func LinesToSingleCsvToStrSlice(input <-chan string) (csv []string) {
+	return strings.Split(LinesToStrLine(input), ",")
 }
