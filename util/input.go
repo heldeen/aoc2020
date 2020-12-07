@@ -21,7 +21,7 @@ func LinesToStrSlice(input <-chan string) (lines []string) {
 	return
 }
 
-//Lines go slices based on whitespace grouping
+//Lines by slices based on whitespace grouping
 func GroupedLines(input <-chan string) <-chan []string {
 
 	groupedInput := make(chan []string)

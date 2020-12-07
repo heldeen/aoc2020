@@ -34,15 +34,15 @@ func AddCommandsTo(root *cobra.Command) {
 	root.AddCommand(day)
 }
 `
-
 	problemTemplate = `package day{{ .N }}
 
 import (
     "fmt"
 
+    "github.com/spf13/cobra"
+
     "github.com/heldeen/aoc2020/challenge"
 	"github.com/heldeen/aoc2020/util"
-	"github.com/spf13/cobra"
 )
 
 func {{ .AB | toLower }}Command() *cobra.Command {
@@ -65,8 +65,9 @@ func {{ .AB | toLower }}(challenge *challenge.Input) int {
 import (
 	"testing"
 
-	"github.com/heldeen/aoc2020/challenge"
 	"github.com/stretchr/testify/require"
+
+    "github.com/heldeen/aoc2020/challenge"
 )
 
 func Test{{ .AB }}(t *testing.T) {
