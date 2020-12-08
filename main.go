@@ -14,6 +14,7 @@ import (
 	"github.com/heldeen/aoc2020/challenge/day5"
 	"github.com/heldeen/aoc2020/challenge/day6"
 	"github.com/heldeen/aoc2020/challenge/day7"
+	"github.com/heldeen/aoc2020/challenge/day8"
 )
 
 func main() {
@@ -34,6 +35,7 @@ func main() {
 	day5.AddCommandsTo(rootCommand)
 	day6.AddCommandsTo(rootCommand)
 	day7.AddCommandsTo(rootCommand)
+	day8.AddCommandsTo(rootCommand)
 	//dayX.AddCommandsTo(rootCommand) // go run gen/problem.go X a
 
 	if err := rootCommand.Execute(); err != nil {

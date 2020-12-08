@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -127,21 +128,18 @@ func main() {
 		abort(err)
 	}
 
-	if _, stat := os.Stat(filepath.Join(p, "input.txt")); os.IsNotExist(stat) {
+	inputOutputPath := filepath.Join(p, "input.txt")
+	if _, stat := os.Stat(inputOutputPath); os.IsNotExist(stat) {
 		fmt.Println("fetching input for day...SIKE! You have to do it", n)
-		//problemInput, err := getInput(n)
-		//if err != nil {
-		//	panic(err)
-		//}
-		//
-		//if err := ioutil.WriteFile(filepath.Join(p, "input.txt"), problemInput, 0644); err != nil {
-		//	panic(err)
-		//}
-		file, err := os.Create(filepath.Join(p, "input.txt"))
-		defer file.Close()
+		problemInput, err := getInput(n)
 		if err != nil {
 			panic(err)
 		}
+
+		if err := ioutil.WriteFile(inputOutputPath, problemInput, 0644); err != nil {
+			panic(err)
+		}
+
 	} else {
 		fmt.Println("input already downloaded, skipping...")
 	}
@@ -187,8 +185,10 @@ func chromeCookiePath() (string, error) {
 }
 
 func getInput(day int) ([]byte, error) {
-	_, _ = os.UserConfigDir()
-	_, _ = os.UserCacheDir()
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://adventofcode.com/2020/day/%d/input", day), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	//cookiePath, err := chromeCookiePath()
 	//if err != nil {
@@ -204,12 +204,25 @@ func getInput(day int) ([]byte, error) {
 	//	return nil, fmt.Errorf("session cookie not found or too many results. Got %d, want 1, ensure that you are logged in", len(cookies))
 	//}
 	//
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://adventofcode.com/2020/day/%d/input", day), nil)
+	//sessionToken := cookies[0].HTTPCookie()
+
+	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
 	}
-	//
-	//sessionToken := cookies[0].HTTPCookie()
+	b, err := ioutil.ReadFile(filepath.Join(homeDir, ".aocdlconfig"))
+	if err != nil {
+		return nil, err
+	}
+
+	aocSession := &struct {
+		S string `json:"session-cookie"`
+	}{}
+
+	err = json.Unmarshal(b, aocSession)
+	if err != nil {
+		return nil, err
+	}
 
 	exp, err := time.Parse(time.RFC3339, "2030-10-31T15:53:59.991Z")
 	if err != nil {
@@ -218,7 +231,7 @@ func getInput(day int) ([]byte, error) {
 
 	ck := http.Cookie{
 		Name:       "session",
-		Value:      "", //TODO get this
+		Value:      aocSession.S,
 		Path:       "/",
 		Domain:     ".adventofcode.com",
 		Expires:    exp,
