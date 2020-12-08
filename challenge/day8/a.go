@@ -2,13 +2,13 @@ package day8
 
 import (
 	"fmt"
-	"github.com/heldeen/aoc2020/util"
 	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/heldeen/aoc2020/challenge"
+	"github.com/heldeen/aoc2020/util"
 )
 
 func aCommand() *cobra.Command {

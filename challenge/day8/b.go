@@ -2,13 +2,12 @@ package day8
 
 import (
 	"fmt"
-	"github.com/heldeen/aoc2020/util"
+	"github.com/spf13/cobra"
 	"strconv"
 	"strings"
 
-	"github.com/spf13/cobra"
-
 	"github.com/heldeen/aoc2020/challenge"
+	"github.com/heldeen/aoc2020/util"
 )
 
 func bCommand() *cobra.Command {
@@ -35,7 +34,6 @@ func (g *gameconsole) RunB() int {
 
 //Answer: 1125
 func b(challenge *challenge.Input) int {
-
 	var mem []instruction
 	for l := range challenge.Lines() {
 		raw := strings.Fields(l)
