@@ -1,36 +1,12 @@
 package day8
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
 	"strconv"
 	"strings"
 
 	"github.com/heldeen/aoc2020/challenge"
 	"github.com/heldeen/aoc2020/util"
 )
-
-func bCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "b",
-		Short: "Day 8, Problem B",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", B(challenge.FromFile()))
-		},
-	}
-}
-
-func (g *gameconsole) RunB() int {
-	instructionTracker := util.NewSet()
-	for g.insPointer < len(g.memory) {
-		if instructionTracker.Contains(strconv.Itoa(g.insPointer)) {
-			return -1
-		}
-		instructionTracker.Add(strconv.Itoa(g.insPointer))
-		g.processInstruction(g.memory[g.insPointer].ins, g.memory[g.insPointer].arg)
-	}
-	return g.accumulator
-}
 
 //Answer: 1125
 func B(challenge *challenge.Input) int {
@@ -64,4 +40,16 @@ func B(challenge *challenge.Input) int {
 		return result
 	}
 	return 0
+}
+
+func (g *gameconsole) RunB() int {
+	instructionTracker := util.NewSet()
+	for g.insPointer < len(g.memory) {
+		if instructionTracker.Contains(strconv.Itoa(g.insPointer)) {
+			return -1
+		}
+		instructionTracker.Add(strconv.Itoa(g.insPointer))
+		g.processInstruction(g.memory[g.insPointer].ins, g.memory[g.insPointer].arg)
+	}
+	return g.accumulator
 }

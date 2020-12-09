@@ -1,28 +1,16 @@
 package day4
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/heldeen/aoc2020/challenge"
-	"github.com/spf13/cobra"
 )
 
-func bCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "b",
-		Short: "Day 4, Problem B",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", b(challenge.FromFile()))
-		},
-	}
-}
-
 //Answer: 160
-func b(challenge *challenge.Input) int {
+func B(challenge *challenge.Input) int {
 	valid := 0
 	passports := parseRawPassports(challenge.Lines())
 	for _, p := range passports {

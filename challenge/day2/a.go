@@ -1,25 +1,13 @@
 package day2
 
 import (
-	"fmt"
 	"github.com/heldeen/aoc2020/challenge"
 	"github.com/heldeen/aoc2020/util"
-	"github.com/spf13/cobra"
 	"regexp"
 )
 
-func aCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "a",
-		Short: "Day 2, Problem A",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", a(challenge.FromFile()))
-		},
-	}
-}
-
 //Answer: 398
-func a(challenge *challenge.Input) int {
+func A(challenge *challenge.Input) int {
 
 	var valid int
 

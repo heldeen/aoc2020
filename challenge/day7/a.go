@@ -1,27 +1,14 @@
 package day7
 
 import (
-	"fmt"
 	"strings"
-
-	"github.com/spf13/cobra"
 
 	"github.com/heldeen/aoc2020/challenge"
 	"github.com/heldeen/aoc2020/util"
 )
 
-func aCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "a",
-		Short: "Day 7, Problem A",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", a(challenge.FromFile()))
-		},
-	}
-}
-
 //Answer: 177
-func a(challenge *challenge.Input) int {
+func A(challenge *challenge.Input) int {
 	rules := loadRules(challenge.Lines())
 
 	masterList := util.NewSet()

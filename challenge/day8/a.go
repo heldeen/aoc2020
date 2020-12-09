@@ -8,6 +8,25 @@ import (
 	"github.com/heldeen/aoc2020/util"
 )
 
+//Answer: 1137
+func A(challenge *challenge.Input) int {
+
+	var mem []instruction
+	for l := range challenge.Lines() {
+		raw := strings.Fields(l)
+		mem = append(mem, instruction{
+			ins: raw[0],
+			arg: util.MustAtoI(raw[1]),
+		})
+	}
+
+	g := gameconsole{
+		memory: mem,
+	}
+
+	return g.Run()
+}
+
 type instruction struct {
 	ins string
 	arg int
@@ -43,23 +62,4 @@ func (g *gameconsole) processInstruction(ins string, arg int) int {
 	}
 	g.insPointer += incInsPointer
 	return 0
-}
-
-//Answer: 1137
-func A(challenge *challenge.Input) int {
-
-	var mem []instruction
-	for l := range challenge.Lines() {
-		raw := strings.Fields(l)
-		mem = append(mem, instruction{
-			ins: raw[0],
-			arg: util.MustAtoI(raw[1]),
-		})
-	}
-
-	g := gameconsole{
-		memory: mem,
-	}
-
-	return g.Run()
 }

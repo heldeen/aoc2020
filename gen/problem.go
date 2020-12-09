@@ -27,7 +27,6 @@ import (
 	"fmt"
 	
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	
 	"github.com/heldeen/aoc2020/challenge"
 	"github.com/heldeen/aoc2020/challenge/day{{ .N }}"
@@ -42,22 +41,23 @@ func init() {
 	day.AddCommand(&cobra.Command{
 		Use:   "a",
 		Short: "Day {{ .N }}, Problem A",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", day{{ .N }}.A(challenge.FromFile()))
+		Run: func(cmd *cobra.Command, _ []string) {
+			flag := cmd.Parent().Flag("input")
+			fmt.Printf("Answer: %d\n", day{{ .N }}.A(challenge.FromFileP(flag.Value.String())))
 		},
 	})
 	day.AddCommand(&cobra.Command{
 		Use:   "b",
 		Short: "Day {{ .N }}, Problem B",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", day{{ .N }}.B(challenge.FromFile()))
+		Run: func(cmd *cobra.Command, _ []string) {
+			flag := cmd.Parent().Flag("input")
+			fmt.Printf("Answer: %d\n", day{{ .N }}.B(challenge.FromFileP(flag.Value.String())))
 		},
 	})
 	
-	flags := day.PersistentFlags()
-
+	flags := day.Flags()
 	flags.StringP("input", "i", "./challenge/day{{ .N }}/input.txt", "Input File to read")
-	_ = viper.BindPFlags(flags)
+
 	rootCmd.AddCommand(day)
 }
 `
