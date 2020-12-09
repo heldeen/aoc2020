@@ -15,7 +15,7 @@ func bCommand() *cobra.Command {
 		Use:   "b",
 		Short: "Day 8, Problem B",
 		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", b(challenge.FromFile()))
+			fmt.Printf("Answer: %d\n", B(challenge.FromFile()))
 		},
 	}
 }
@@ -33,7 +33,7 @@ func (g *gameconsole) RunB() int {
 }
 
 //Answer: 1125
-func b(challenge *challenge.Input) int {
+func B(challenge *challenge.Input) int {
 	var mem []instruction
 	for l := range challenge.Lines() {
 		raw := strings.Fields(l)

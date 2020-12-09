@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -19,20 +20,45 @@ import (
 )
 
 const (
-	glueTemplate = `package day{{ .N }}
+	glueTemplate = `package cmd
 
-import "github.com/spf13/cobra"
 
-func AddCommandsTo(root *cobra.Command) {
-	day := &cobra.Command{
+import (
+	"fmt"
+	
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	
+	"github.com/heldeen/aoc2020/challenge"
+	"github.com/heldeen/aoc2020/challenge/day{{ .N }}"
+)
+
+func init() {
+    day := &cobra.Command{
 		Use:   "{{ .N }}",
 		Short: "Problems for Day {{ .N }}",
 	}
 
-	day.AddCommand(aCommand())
-    //day.AddCommand(bCommand())
+	day.AddCommand(&cobra.Command{
+		Use:   "a",
+		Short: "Day {{ .N }}, Problem A",
+		Run: func(_ *cobra.Command, _ []string) {
+			fmt.Printf("Answer: %d\n", day{{ .N }}.A(challenge.FromFile()))
+		},
+	})
+	day.AddCommand(&cobra.Command{
+		Use:   "b",
+		Short: "Day {{ .N }}, Problem B",
+		Run: func(_ *cobra.Command, _ []string) {
+			fmt.Printf("Answer: %d\n", day{{ .N }}.B(challenge.FromFile()))
+		},
+	})
+	
+	flags := day.PersistentFlags()
 
-	root.AddCommand(day)
+	flags.StringP("input", "i", "./challenge/day{{ .N }}/input.txt", "Input File to read")
+	_ = viper.BindPFlags(flags)
+	rootCmd.AddCommand(day)
 }
 `
 	problemTemplate = `package day{{ .N }}
@@ -46,17 +72,7 @@ import (
 	"github.com/heldeen/aoc2020/util"
 )
 
-func {{ .AB | toLower }}Command() *cobra.Command {
-    return &cobra.Command{
-        Use:   "{{ .AB | toLower }}",
-        Short: "Day {{ .N }}, Problem {{ .AB }}",
-        Run: func(_ *cobra.Command, _ []string) {
-            fmt.Printf("Answer: %d\n", {{ .AB | toLower }}(challenge.FromFile()))
-        },
-    }
-}
-
-func {{ .AB | toLower }}(challenge *challenge.Input) int {
+func {{ .AB }}(challenge *challenge.Input) int {
     return 0
 }
 `
@@ -74,7 +90,7 @@ import (
 func Test{{ .AB }}(t *testing.T) {
 	input := challenge.FromLiteral("foobar")
 
-	result := {{ .AB | toLower }}(input)
+	result := {{ .AB }}(input)
 
 	require.Equal(t, 42, result)
 }
@@ -87,8 +103,15 @@ type metadata struct {
 }
 
 func main() {
-	if len(os.Args) != 3 {
-		abort(fmt.Errorf("expected 3 args but got %d", len(os.Args)))
+	date := time.Now().Format("20060102150405")
+	logger, err := os.OpenFile(fmt.Sprintf("AoC.%s.log", date), os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0660)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.SetOutput(logger)
+
+	if len(os.Args) != 2 {
+		log.Fatalf("expected 2 args but got %d", len(os.Args))
 	}
 
 	n, err := strconv.Atoi(os.Args[1])
@@ -96,9 +119,9 @@ func main() {
 		abort(err)
 	}
 
-	ab := strings.ToUpper(os.Args[2])
-	if !strings.ContainsAny(ab, "AB") {
-		abort(fmt.Errorf("unknown problem segment: %s", ab))
+	cmdP, err := util.CmdPkgPath()
+	if err != nil {
+		abort(err)
 	}
 
 	p, err := util.PkgPath(n)
@@ -110,18 +133,19 @@ func main() {
 		abort(err)
 	}
 
-	m := metadata{N: n, AB: ab}
 	funcs := template.FuncMap{
 		"toLower": strings.ToLower,
 	}
 
-	gluePath := filepath.Join(p, "import.go")
+	gluePath := filepath.Join(cmdP, fmt.Sprintf("importDay%d.go", n))
 	if _, stat := os.Stat(gluePath); stat != nil && os.IsNotExist(stat) {
-		genFile(gluePath, glueTemplate, funcs, m)
+		genFile(gluePath, glueTemplate, funcs, metadata{N: n, AB: "A"})
 	}
 
-	genFile(filepath.Join(p, fmt.Sprintf("%s.go", strings.ToLower(ab))), problemTemplate, funcs, m)
-	genFile(filepath.Join(p, fmt.Sprintf("%s_test.go", strings.ToLower(ab))), testTemplate, funcs, m)
+	for _, ab := range []string{"A", "B"} {
+		genFile(filepath.Join(p, fmt.Sprintf("%s.go", strings.ToLower(ab))), problemTemplate, funcs, metadata{N: n, AB: ab})
+		genFile(filepath.Join(p, fmt.Sprintf("%s_test.go", strings.ToLower(ab))), testTemplate, funcs, metadata{N: n, AB: ab})
+	}
 
 	goimports := exec.Command("goimports", "-w", p)
 	if err := goimports.Run(); err != nil {
@@ -130,7 +154,7 @@ func main() {
 
 	inputOutputPath := filepath.Join(p, "input.txt")
 	if _, stat := os.Stat(inputOutputPath); os.IsNotExist(stat) {
-		fmt.Println("fetching input for day...SIKE! You have to do it", n)
+		log.Printf("fetching input for day...%d\n", n)
 		problemInput, err := getInput(n)
 		if err != nil {
 			panic(err)
@@ -141,29 +165,27 @@ func main() {
 		}
 
 	} else {
-		fmt.Println("input already downloaded, skipping...")
+		log.Print("input already downloaded, skipping...")
 	}
 
-	fmt.Printf("Generated problem %s for day %d. Be sure to add it to main.go\n", ab, n)
-
-	// TODO: Can we modify main.go easily?
+	log.Printf("Generated problems for day %d.", n)
 }
 
 func genFile(path, t string, funcs template.FuncMap, m metadata) {
+	log.Println("creating", path)
 	if _, stat := os.Stat(path); os.IsNotExist(stat) {
-		fmt.Println("creating", path)
 		t := template.Must(template.New(path).Funcs(funcs).Parse(t))
 		cf, err := os.Create(path)
 		if err != nil {
-			abort(err)
+			log.Fatalf("creating path %v", err)
 		}
 
 		defer mustClose(cf)
 		if err := t.Execute(cf, m); err != nil {
-			abort(err)
+			log.Fatalf("exectute template %v", err)
 		}
 	} else {
-		fmt.Println(path, "already exists, skipping...")
+		log.Println(path, "already exists, skipping...")
 	}
 }
 
@@ -201,7 +223,7 @@ func getInput(day int) ([]byte, error) {
 	//}
 	//
 	//if len(cookies) != 1 {
-	//	return nil, fmt.Errorf("session cookie not found or too many results. Got %d, want 1, ensure that you are logged in", len(cookies))
+	//	return nil, log.Errorf("session cookie not found or too many results. Got %d, want 1, ensure that you are logged in", len(cookies))
 	//}
 	//
 	//sessionToken := cookies[0].HTTPCookie()
@@ -267,11 +289,10 @@ func mustClose(c io.Closer) {
 	}
 
 	if err := c.Close(); err != nil {
-		panic(fmt.Errorf("error closing io.Closer: %w", err))
+		log.Fatalf("error closing io.Closer: %w", err)
 	}
 }
 
 func abort(err error) {
-	fmt.Printf("%s\n\nsyntax: go run gen/problem.go <day> <a|b>\n", err.Error())
-	os.Exit(1)
+	log.Fatalf("%s\n\nsyntax: go run gen/problem.go <day> <a|b>\n", err.Error())
 }

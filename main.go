@@ -7,14 +7,6 @@ import (
 	"time"
 
 	"github.com/heldeen/aoc2020/challenge/cmd"
-	"github.com/heldeen/aoc2020/challenge/day1"
-	"github.com/heldeen/aoc2020/challenge/day2"
-	"github.com/heldeen/aoc2020/challenge/day3"
-	"github.com/heldeen/aoc2020/challenge/day4"
-	"github.com/heldeen/aoc2020/challenge/day5"
-	"github.com/heldeen/aoc2020/challenge/day6"
-	"github.com/heldeen/aoc2020/challenge/day7"
-	"github.com/heldeen/aoc2020/challenge/day8"
 )
 
 func main() {
@@ -25,20 +17,9 @@ func main() {
 	}
 	log.SetOutput(logger)
 
-	rootCommand := cmd.NewRootCommand()
-
-	day1.AddCommandsTo(rootCommand)
-	day2.AddCommandsTo(rootCommand)
-	day3.AddCommandsTo(rootCommand)
-	day3.AddCommandsTo(rootCommand)
-	day4.AddCommandsTo(rootCommand)
-	day5.AddCommandsTo(rootCommand)
-	day6.AddCommandsTo(rootCommand)
-	day7.AddCommandsTo(rootCommand)
-	day8.AddCommandsTo(rootCommand)
 	//dayX.AddCommandsTo(rootCommand) // go run gen/problem.go X a
 
-	if err := rootCommand.Execute(); err != nil {
+	if err := cmd.Execute(); err != nil {
 		log.Fatalln(err)
 	}
 }

@@ -7,25 +7,22 @@ import (
 	"github.com/pkg/profile"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"github.com/heldeen/aoc2020/challenge/example"
 )
-
-func addDays(root *cobra.Command) {
-	example.AddCommandsTo(root)
-}
 
 type prof interface {
 	Stop()
 }
 
-func NewRootCommand() *cobra.Command {
-	var (
-		start    time.Time
-		profiler prof
-	)
+// Execute executes the root command.
+func Execute() error {
+	return rootCmd.Execute()
+}
 
-	result := &cobra.Command{
+var (
+	start    time.Time
+	profiler prof
+
+	rootCmd = &cobra.Command{
 		Use:     "aoc2020",
 		Short:   "Advent of Code 2020 Solutions",
 		Long:    "Golang implementations for the 2020 Advent of Code problems",
@@ -46,17 +43,13 @@ func NewRootCommand() *cobra.Command {
 			fmt.Println("Took", time.Since(start))
 		},
 	}
+)
 
-	addDays(result)
+func init() {
 
-	flags := result.PersistentFlags()
-
-	flags.StringP("input", "i", "", "Input File to read")
-	_ = result.MarkPersistentFlagRequired("input")
+	flags := rootCmd.PersistentFlags()
 
 	flags.Bool("profile", false, "Profile implementation performance")
 
 	_ = viper.BindPFlags(flags)
-
-	return result
 }
