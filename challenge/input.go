@@ -3,6 +3,7 @@ package challenge
 import (
 	"bufio"
 	"io"
+	"log"
 	"os"
 	"strings"
 
@@ -19,6 +20,15 @@ func FromFile() *Input {
 	f, err := os.Open(viper.GetString("input"))
 	if err != nil {
 		panic(err)
+	}
+
+	return newInputFromReader(f, f)
+}
+
+func FromFileP(p string) *Input {
+	f, err := os.Open(p)
+	if err != nil {
+		log.Fatalf("opening input file %v", err)
 	}
 
 	return newInputFromReader(f, f)

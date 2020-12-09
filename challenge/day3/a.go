@@ -1,21 +1,17 @@
 package day3
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/heldeen/aoc2020/challenge"
-	"github.com/spf13/cobra"
 )
 
-func aCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "a",
-		Short: "Day 3, Problem A",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", a(challenge.FromFile()))
-		},
-	}
+//Answer: 181
+func A(challenge *challenge.Input) int {
+
+	h := loadHill(challenge.Lines())
+
+	return h.traverse(3, 1)
 }
 
 type hill struct {
@@ -30,14 +26,6 @@ func (h hill) treeAt(x, y int) bool {
 	}
 
 	return h.grid[y][x%(h.realX)]
-}
-
-//Answer: 181
-func a(challenge *challenge.Input) int {
-
-	h := loadHill(challenge.Lines())
-
-	return h.traverse(3, 1)
 }
 
 func (h hill) traverse(xInc, yInc int) int {

@@ -1,24 +1,30 @@
 package day8
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/spf13/cobra"
 
 	"github.com/heldeen/aoc2020/challenge"
 	"github.com/heldeen/aoc2020/util"
 )
 
-func aCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "a",
-		Short: "Day 8, Problem A",
-		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", a(challenge.FromFile()))
-		},
+//Answer: 1137
+func A(challenge *challenge.Input) int {
+
+	var mem []instruction
+	for l := range challenge.Lines() {
+		raw := strings.Fields(l)
+		mem = append(mem, instruction{
+			ins: raw[0],
+			arg: util.MustAtoI(raw[1]),
+		})
 	}
+
+	g := gameconsole{
+		memory: mem,
+	}
+
+	return g.Run()
 }
 
 type instruction struct {
@@ -56,23 +62,4 @@ func (g *gameconsole) processInstruction(ins string, arg int) int {
 	}
 	g.insPointer += incInsPointer
 	return 0
-}
-
-//Answer: 1137
-func a(challenge *challenge.Input) int {
-
-	var mem []instruction
-	for l := range challenge.Lines() {
-		raw := strings.Fields(l)
-		mem = append(mem, instruction{
-			ins: raw[0],
-			arg: util.MustAtoI(raw[1]),
-		})
-	}
-
-	g := gameconsole{
-		memory: mem,
-	}
-
-	return g.Run()
 }
