@@ -14,26 +14,30 @@ func init() {
 		Short: "Problems for Day 8",
 	}
 
-	day.AddCommand(&cobra.Command{
+	a := &cobra.Command{
 		Use:   "a",
 		Short: "Day 8, Problem A",
 		Run: func(cmd *cobra.Command, _ []string) {
-			flag := cmd.Parent().Flag("input")
+			flag := cmd.Flag("input")
 			fmt.Printf("Answer: %d\n", day8.A(challenge.FromFileP(flag.Value.String())))
 		},
-	})
-	day.AddCommand(&cobra.Command{
+	}
+
+	a.Flags().StringP("input", "i", "./challenge/day8/input.txt", "Input File to read")
+
+	day.AddCommand(a)
+	b := &cobra.Command{
 		Use:   "b",
 		Short: "Day 8, Problem B",
 		Run: func(cmd *cobra.Command, _ []string) {
-			flag := cmd.Parent().Flag("input")
+			flag := cmd.Flag("input")
 			fmt.Printf("Answer: %d\n", day8.B(challenge.FromFileP(flag.Value.String())))
 		},
-	})
+	}
 
-	flags := day.Flags()
+	b.Flags().StringP("input", "i", "./challenge/day8/input.txt", "Input File to read")
 
-	flags.StringP("input", "i", "./challenge/day8/input.txt", "Input File to read")
+	day.AddCommand(b)
 
 	rootCmd.AddCommand(day)
 }

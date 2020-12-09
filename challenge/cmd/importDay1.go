@@ -23,8 +23,8 @@ func init() {
 			fmt.Printf("Answer: %d\n", day1.A(challenge.FromFileP(flag.Value.String())))
 		},
 	}
-	flagsA := a.Flags()
-	flagsA.StringP("input", "i", "./challenge/day1/input.txt", "Input File to read")
+
+	a.Flags().StringP("input", "i", "./challenge/day1/input.txt", "Input File to read")
 
 	day.AddCommand(a)
 
@@ -37,8 +37,7 @@ func init() {
 		},
 	}
 
-	flagsB := b.Flags()
-	flagsB.StringP("input", "i", "./challenge/day1/input.txt", "Input File to read")
+	b.Flags().StringP("input", "i", "./challenge/day1/input.txt", "Input File to read")
 
 	day.AddCommand(b)
 

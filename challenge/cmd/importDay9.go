@@ -24,8 +24,7 @@ func init() {
 		},
 	}
 
-	flagsA := a.Flags()
-	flagsA.StringP("input", "i", "./challenge/day9/input.txt", "Input File to read")
+	a.Flags().StringP("input", "i", "./challenge/day9/input.txt", "Input File to read")
 
 	day.AddCommand(a)
 
@@ -38,8 +37,7 @@ func init() {
 		},
 	}
 
-	flagsB := b.Flags()
-	flagsB.StringP("input", "i", "./challenge/day9/input.txt", "Input File to read")
+	b.Flags().StringP("input", "i", "./challenge/day9/input.txt", "Input File to read")
 
 	day.AddCommand(b)
 
