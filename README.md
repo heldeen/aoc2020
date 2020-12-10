@@ -2,7 +2,7 @@
 
 [![](https://github.com/heldeen/aoc2020/workflows/CI/badge.svg)](https://github.com/heldeen/aoc2020/actions) [![Coverage Status](https://coveralls.io/repos/github/heldeen/aoc2020/badge.svg?branch=master)](https://coveralls.io/github/heldeen/aoc2020?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/heldeen/aoc2020)](https://goreportcard.com/report/github.com/heldeen/aoc2020) [![License](https://img.shields.io/badge/license-MIT-brightgreen)](./LICENSE)
 
-Solutions for the 2020 Advent of Code
+Solutions for the 2020 [Advent of Code](https://adventofcode.com/)
 
 ## Building
 

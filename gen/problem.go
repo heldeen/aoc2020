@@ -163,11 +163,11 @@ func main() {
 		log.Printf("fetching input for day...%d\n", n)
 		problemInput, err := getInput(n)
 		if err != nil {
-			panic(err)
+			log.Fatalf("get input %v", err)
 		}
 
 		if err := ioutil.WriteFile(inputOutputPath, problemInput, 0644); err != nil {
-			panic(err)
+			log.Fatalf("writing file: %v", err)
 		}
 
 	} else {
