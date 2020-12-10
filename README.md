@@ -17,10 +17,10 @@ go test ./...
 
 To run a solution, use the problem name followed by the path to an input file.
 
-For example, to run problem 2a:
+For example, to run problem `2a`:
 
 ```bash
-$ go run ./main.go 2a ./day2/input.txt
+$ go run ./main.go 2 a -i ./challenge/day2/input.txt
 Answer: 9633
 Took 999.4µs
 ```
@@ -30,12 +30,12 @@ Took 999.4µs
 A generator program is included in `gen/problem.go` that makes templates for each day. For
 example, `go run gen/problem.go 9 a` will generate the following files:
 
-* `challenge/day9/import.go`: A "glue" file combining commands for both of the day's problems to simplify wiring up subcommands
-* `challenge/day9/a.go`: The main problem implementation, containing a cobra command `A` and the implementation `func a(*challenge.Input) int`
+* `challenge/cmd/importDay9.go`: A "glue" file combining commands for both of the day's problems to simplify wiring up subcommands
+* `challenge/day9/a.go`: The main problem implementation, containing a cobra command `a` and the implementation `func A(*challenge.Input) int`
 * `challenge/day9/a_test.go`: A basic test template
+* `challenge/day9/b.go`: The main problem implementation, containing a cobra command `b` and the implementation `func B(*challenge.Input) int`
+* `challenge/day9/b_test.go`: A basic test template
 * `challenge/day9/input.txt`: The challenge input
-
-I don't yet have a way to register the cobra command in `main.go` automatically.
 
 ## License
 
