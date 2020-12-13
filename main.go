@@ -17,7 +17,7 @@ func main() {
 	}
 	log.SetOutput(logger)
 
-	// go run gen/problem.go X a
+	// go run gen/problem.go X
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatalln(err)

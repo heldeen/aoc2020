@@ -1,5 +1,7 @@
 package util
 
+import "math"
+
 func Max(a, b int) int {
 	if a > b {
 		return a
@@ -38,4 +40,8 @@ func Sign(a int) int {
 		return 1
 	}
 	return -1
+}
+
+func Abs(a int) int {
+	return int(math.Abs(float64(a)))
 }
