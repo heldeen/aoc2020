@@ -5,7 +5,7 @@ import (
 	"github.com/heldeen/aoc2020/util"
 )
 
-//441
+//Answer: 441
 func A(challenge *challenge.Input) int {
 
 	s := ship{direction: 90}

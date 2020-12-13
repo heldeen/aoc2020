@@ -6,6 +6,7 @@ import (
 	"sort"
 )
 
+//Answer: 3000
 func A(challenge *challenge.Input) int {
 
 	adapters := getAdapters(challenge.Lines())

@@ -5,6 +5,7 @@ import (
 	"github.com/heldeen/aoc2020/util"
 )
 
+//Answer: 40014
 func B(challenge *challenge.Input) int {
 	s := waypointShip{waypointY: 1, waypointX: 10}
 

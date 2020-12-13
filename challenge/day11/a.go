@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+//Answer: 2183
 func A(challenge *challenge.Input) int {
 	return modelPeopleA(loadSeating(challenge.Lines()))
 }

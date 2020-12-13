@@ -4,6 +4,7 @@ import (
 	"github.com/heldeen/aoc2020/challenge"
 )
 
+//Answer: 193434623148032
 func B(challenge *challenge.Input) int {
 
 	adapters := getAdapters(challenge.Lines())
